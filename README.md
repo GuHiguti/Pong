@@ -1,10 +1,14 @@
 # Pong_pygame
 
+
+## Implementados:
+  * Pontuação, velocidade da bola e das barras customizadas
+  * Delay para início do jogo funcionando
+  * Menu para seleção de opções
+  * Funciona com POO
+  * Lançamento satisfatóriamente aleatório
+
 ## Coisas para melhorar:
-  * Receber direito a velocidade
-  * dar um tempo para a pessoa pensar antes do jogo começar
-  * Arrumar a tela de vitória
+  * Buscar otimizações para o código
   * Implementar a possibilidade de jogar contra bots
-  * Dar um título
-  * Aleatorizar o lançamento da bola
 
