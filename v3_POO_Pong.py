@@ -77,10 +77,15 @@ class Pong:
         if self.bot:
             self.bot_down = False
             self.bot_up = False
-            y_futuro = self.yb
-            if y_futuro>self.y2+20+self.alt_barra/2:
+            _y = (self.vy_bola*(self.x2-self.xb+10))/self.vx_bola
+            _H = (self.altura_inf-self.altura_sup)
+            _n = int((self.yb+_y)/_H)
+            y_futuro = self.yb+_y-_n*_H
+            if _n%2==1:
+                y_futuro = _H - y_futuro + self.altura_sup
+            if y_futuro>self.y2+15+self.alt_barra/2:
                 self.bot_down = True
-            elif y_futuro<self.y2-20+self.alt_barra/2:
+            elif y_futuro<self.y2-15+self.alt_barra/2:
                 self.bot_up = True
 
 
@@ -164,11 +169,13 @@ class Pong:
             if self.bola.colliderect(self.barra1) or self.bola.colliderect(self.barra2):
                 self.colide2 = time.time()
                 if self.colide2 - self.colide1 > 0.5:
-                    self.vx_bola = self.vx_bola*(-1.05)
+                    if self.vx_bola<20:
+                        self.vx_bola = self.vx_bola*(-1.05)
                     _t = 0
                 elif _t==0:
-                    self.vy_bola = (-1.2)*self.vy_bola
+                    self.vy_bola = (-1.7)*self.vy_bola
                     self.vx_bola = self.vx_bola*(0.8)
+                        
                     _t = 1
                 self.colide1 = self.colide2
 
