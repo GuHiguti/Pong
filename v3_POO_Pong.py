@@ -4,7 +4,7 @@ import time
 from pygame.locals import *
 
 class Pong:
-    def __init__(self,P_max,V_bola,V_barra):
+    def __init__(self,P_max,V_bola,V_barra,Bot):
         pygame.init()
         self.largura = 1000
         self.altura_tela = 620
@@ -31,6 +31,9 @@ class Pong:
         self.alt_barra = 70
         self.b_radius = 10
         self.colide1 = time.time()
+        self.bot = Bot
+        self.bot_down = False
+        self.bot_up = False
 
     def mov_bola(self):
         if self.yb-10>self.altura_sup and self.yb+10<self.altura_inf:
@@ -52,6 +55,8 @@ class Pong:
         self.vx_bola = int(self.v_bola*random.randint(6,8)/10)
         self.vy_bola = self.v_bola - self.vx_bola
         self.v_barra = self.v_barra
+        self.bot_down = False
+        self.bot_up = False
 
     def formas(self):
         self.limite_cima = pygame.draw.line(self.scr,(255,255,255),(0,self.altura_sup-5),(self.largura,self.altura_sup-5))
@@ -68,6 +73,17 @@ class Pong:
         self.scr.blit(self.texto1, ((self.largura/2)-80, 10))
         self.scr.blit(self.texto2, ((self.largura/2)-80, 40))
     
+    def bot_move(self):
+        if self.bot:
+            self.bot_down = False
+            self.bot_up = False
+            y_futuro = self.yb
+            if y_futuro>self.y2+20+self.alt_barra/2:
+                self.bot_down = True
+            elif y_futuro<self.y2-20+self.alt_barra/2:
+                self.bot_up = True
+
+
     def tela(self):
         self.scr = pygame.display.set_mode((self.largura, self.altura_tela))
         pygame.display.set_caption("PONG GAME") #Nome da tela
@@ -94,6 +110,7 @@ class Pong:
                             self.j1=0
                             self.j2=0
 
+                self.bot_move()
 
                 if pygame.key.get_pressed()[K_w]:
                     if self.y1>self.altura_sup:
@@ -101,10 +118,10 @@ class Pong:
                 if pygame.key.get_pressed()[K_s]:
                     if self.y1+self.alt_barra<self.altura_inf:
                         self.y1+=self.v_barra
-                if pygame.key.get_pressed()[K_UP]:
+                if pygame.key.get_pressed()[K_UP] or self.bot_up:
                     if self.y2>self.altura_sup:
                         self.y2-=self.v_barra
-                if pygame.key.get_pressed()[K_DOWN]:
+                if pygame.key.get_pressed()[K_DOWN] or self.bot_down:
                     if self.y2+self.alt_barra<self.altura_inf:
                         self.y2+=self.v_barra
 
@@ -145,14 +162,9 @@ class Pong:
             self.formas()
 
             if self.bola.colliderect(self.barra1) or self.bola.colliderect(self.barra2):
-                #try:
-                #   self.colide1>3
-                #except:
-                #   self.colide1 = time.time()
-                
                 self.colide2 = time.time()
                 if self.colide2 - self.colide1 > 0.5:
-                    self.vx_bola = self.vx_bola*(-1.1)
+                    self.vx_bola = self.vx_bola*(-1.05)
                     _t = 0
                 elif _t==0:
                     self.vy_bola = (-1.2)*self.vy_bola

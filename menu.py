@@ -1,3 +1,4 @@
+from tkinter.constants import BOTH
 import pygame
 from pygame.locals import *
 import PySimpleGUI as sg
@@ -13,18 +14,20 @@ class Screens():
             [sg.Slider(range=(1,4),default_value=2,orientation='h', size=(30,20), key='Vel_bola')],
             [sg.Text('Velocidade da barra: ')],
             [sg.Slider(range=(1,4),default_value=2,orientation='h', size=(30,20), key='Vel_barra')],
+            [sg.Checkbox('Partida contra bot',default=False,key='Bot')],
             [sg.Button('INICIAR')]
         ]
         #Janela
         self.janela = sg.Window('PONG MENU').layout(layout)
     def Iniciar(self):   
-        global P_max,v_bola,v_barra       
+        global P_max,v_bola,v_barra,Bot       
         self.button, self.values = self.janela.read()
         try:
             if self.values!=None:
                 P_max = self.values['Max_round']
                 v_bola = 8 + self.values['Vel_bola']*2
                 v_barra = 2 + self.values['Vel_barra']*4
+                Bot = self.values['Bot']
                 self.janela.close()
         except:
             exit()
@@ -32,6 +35,6 @@ class Screens():
 while True:
     tela = Screens()
     tela.Iniciar()
-    jogo = game.Pong(P_max,v_bola,v_barra)
+    jogo = game.Pong(P_max,v_bola,v_barra,Bot)
     jogo.tela()
     del jogo
